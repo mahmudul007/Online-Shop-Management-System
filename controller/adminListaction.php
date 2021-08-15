@@ -1,0 +1,53 @@
+
+<?php
+require '../model/dbRead.php';
+require '../model/dbConnect.php';
+require '../model/Db_admin_Delete.php';
+
+
+$username = empty($_GET['username']) ? "" : $_GET['username'];
+
+if ( empty($username)){
+    $userList = getALLadmin();
+   }
+   else{
+       $userList = getAdmin($username);
+   }
+
+   if (!empty ($_GET['uid']) and !empty($_GET['uname']))
+   {
+       $response =removeAdmin($_GET['uid'],$_GET['uname'] );
+       if ($response)
+       { 
+        $userList = getALLadmin();
+           $succecfullMessage= "deleted sucessfully an admin";
+       }
+       else{
+           $errorMassage ="error while deleting";
+       }
+
+   }
+   
+
+
+echo "<table>";
+echo "<tr>"; 
+echo "<th> Id </th>";
+echo "<th> Username </th>";
+echo "<th> Action </th>";
+
+echo "</tr>";
+
+for($i = 0;  $i < count($userList); $i++)
+{
+    echo "<tr>";
+    echo "<td>" . $userList[$i]["id"]."</td>";
+    echo "<td>" . $userList[$i]["username"]."</td>";
+
+    echo "<td> <a href='". $_SERVER['PHP_SELF'] . "?uid=" . $userList[$i]["id"]. "&uname=" . $userList[$i]["username"] ." ' > Delete </a></td>";
+   
+    echo"</tr>";
+}
+echo "</table>";
+
+?>
